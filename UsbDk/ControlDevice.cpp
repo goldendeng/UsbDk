@@ -938,6 +938,12 @@ NTSTATUS CUsbDkControlDevice::RemoveRedirect(const USB_DK_DEVICE_ID &DeviceId)
             if (!WaitForDetachment(DeviceId))
             {
                 TraceEvents(TRACE_LEVEL_ERROR, TRACE_CONTROLDEVICE, "%!FUNC! Wait for redirector detachment failed.");
+				if (!m_Redirections.Delete(&DeviceId))
+				{
+					TraceEvents(TRACE_LEVEL_ERROR, TRACE_CONTROLDEVICE, "%!FUNC! No such redirection registered.");
+					res = STATUS_OBJECT_NAME_NOT_FOUND;
+				}
+				m_Redirections.Dump();
                 return STATUS_DEVICE_NOT_CONNECTED;
             }
         }
@@ -1030,7 +1036,7 @@ void CUsbDkRedirection::NotifyRedirectionRemovalStarted()
 
 bool CUsbDkRedirection::WaitForDetachment()
 {
-    auto waitRes = m_RedirectionRemoved.Wait(true, -SecondsTo100Nanoseconds(120));
+    auto waitRes = m_RedirectionRemoved.Wait(true, -SecondsTo100Nanoseconds(1));
     if ((waitRes == STATUS_TIMEOUT) || !NT_SUCCESS(waitRes))
     {
         TraceEvents(TRACE_LEVEL_ERROR, TRACE_WDFDEVICE, "%!FUNC! Wait of RedirectionRemoved event failed. %!STATUS!", waitRes);
