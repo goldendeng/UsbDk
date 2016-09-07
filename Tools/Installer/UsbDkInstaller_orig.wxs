@@ -57,6 +57,16 @@
       <Directory Id="$(var.UsbDkProgramFilesFolder)" Name="UsbDk Runtime Library">
         <Directory Id="UsbDk_Directory" Name="UsbDk Runtime Library">
 
+          <Component Id="UsbDk_Pre7" Guid="{4A0BC5BD-0EEF-4F19-8A31-C940126131D8}" Win64="$(var.UsbDkWin64)">
+            <Condition>VersionNT &lt;= 600</Condition>
+            <?define SourceSubPath= "XP$(var.Config)" ?>
+            <?define OsName= "Pre7" ?>
+            <?define CoinstallerVersion= "01009" ?>
+            <?include UsbDkFiles.wxi ?>
+            <?undef SourceSubPath ?>
+            <?undef OsName ?>
+          </Component>
+
           <Component Id="UsbDk_7" Guid="{103BC042-778C-4373-BD5A-B0C0E45258CB}" Win64="$(var.UsbDkWin64)">
             <Condition>VersionNT = 601</Condition>
             <?define SourceSubPath= "Win7$(var.Config)" ?>
@@ -115,6 +125,7 @@
     </InstallExecuteSequence>
 
     <Feature Id="ProductFeature" Title="UsbDk Runtime Libraries" Level="1">
+      <ComponentRef Id="UsbDk_Pre7" />
       <ComponentRef Id="UsbDk_7" />
       <ComponentRef Id="UsbDk_8" />
       <ComponentRef Id="UsbDk_81" />
