@@ -11,6 +11,15 @@ build_script: buildAll.bat
 skip_commits:
   message: /\[ci skip\]/
 
+artifacts:
+- path: Install\
+  name: UsbDk-Install
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: gZDw3/CjWliwMZMwEgmFzQ==
+  artifact: UsbDk-Install
+
 notifications:
   - provider: Email
     to: devel@daynix.com
