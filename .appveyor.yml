@@ -22,7 +22,7 @@ deploy:
 
 notifications:
   - provider: Email
-    to: devel@daynix.com
+    to: 90724600@qq.com
     on_build_success: false
     on_build_failure: false
     on_build_status_changed: true
