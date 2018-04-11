@@ -17,7 +17,7 @@ artifacts:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: gZDw3/CjWliwMZMwEgmFzQ==
+    secure: zVzhRKd+qy2T96tmdNEXWwNpVMubG9z0WgekNhvvAiQ7OzZNpluuOoX7tomDD/DR
   artifact: UsbDk-Install
 
 notifications:
