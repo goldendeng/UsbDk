@@ -49,7 +49,7 @@ bool UsbDkInstaller::Install(bool &NeedRollBack)
     NeedRollBack = true;
     auto infFilePath = buildInfFilePath();
 
-    auto rebootRequired = !m_wdfCoinstaller.PreDeviceInstallEx(infFilePath);
+    m_wdfCoinstaller.PreDeviceInstallEx(infFilePath);
 
     m_scManager.CreateServiceObject(USBDK_DRIVER_NAME, driverLocation.c_str());
 
