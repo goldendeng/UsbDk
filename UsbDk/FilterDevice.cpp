@@ -566,7 +566,8 @@ bool CUsbDkFilterDevice::CStrategist::SelectStrategy(PDEVICE_OBJECT DevObj)
          DevID->Match(L"USB\\ROOT_HUB20")       ||
          DevID->Match(L"USB\\ROOT_HUB30")       ||
          DevID->Match(L"NUSB3\\ROOT_HUB30")     ||
-         DevID->Match(L"IUSB3\\ROOT_HUB30")))
+         DevID->Match(L"IUSB3\\ROOT_HUB30")     ||
+         DevID->Match(L"AMDUSB30\\ROOT_HUB30")))
     {
         TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_FILTERDEVICE, "%!FUNC! Assigning HUB strategy");
         m_Strategy->Delete();
