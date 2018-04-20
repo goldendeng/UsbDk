@@ -58,14 +58,19 @@ bool UsbDkInstaller::Install(bool &NeedRollBack)
     m_wdfCoinstaller.PostDeviceInstall(infFilePath);
     addUsbDkToRegistry();
 
-    return rebootRequired ? false : DeviceMgr::ResetDeviceByClass(GUID_DEVINTERFACE_USB_HOST_CONTROLLER);
+    //TODO: Check whether the usbdk driver is successfully installed
+
+    //It must be restarted
+    return true;
+
+    //return rebootRequired ? false : DeviceMgr::ResetDeviceByClass(GUID_DEVINTERFACE_USB_HOST_CONTROLLER);
 }
 
 void UsbDkInstaller::Uninstall()
 {
     removeUsbDkFromRegistry();
 
-    DeviceMgr::ResetDeviceByClass(GUID_DEVINTERFACE_USB_HOST_CONTROLLER);
+    //DeviceMgr::ResetDeviceByClass(GUID_DEVINTERFACE_USB_HOST_CONTROLLER);
 
     DeleteDriver();
 
