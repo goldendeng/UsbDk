@@ -43,7 +43,7 @@ class UsbDkDriverAccess : public UsbDkDriverFile
 {
 public:
     UsbDkDriverAccess()
-        : UsbDkDriverFile(USBDK_USERMODE_NAME)
+        : UsbDkDriverFile(USBDK_USERMODE_NAME, false, true)
     {}
 
     void GetDevicesList(PUSB_DK_DEVICE_INFO &DevicesArray, ULONG &NumberDevice);

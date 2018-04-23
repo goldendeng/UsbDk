@@ -173,7 +173,7 @@ BOOL UsbDk_StopRedirect(HANDLE DeviceHandle)
 {
     try
     {
-        UsbDkDriverAccess driverAccess;
+        //UsbDkDriverAccess driverAccess;
         unique_ptr<REDIRECTED_DEVICE_HANDLE> deviceHandle(unpackHandle<REDIRECTED_DEVICE_HANDLE>(DeviceHandle));
         deviceHandle->RedirectorAccess.reset();
         return TRUE;
@@ -289,6 +289,7 @@ HANDLE UsbDk_GetRedirectorSystemHandle(HANDLE DeviceHandle)
 
 HANDLE UsbDk_CreateHiderHandle()
 {
+	OutputDebugStringA("UsbDk_CreateHiderHandle");
     try
     {
         unique_ptr<UsbDkHiderAccess> hiderAccess(new UsbDkHiderAccess);
@@ -372,10 +373,12 @@ InstallResult ModifyPersistentHideRules(const USB_DK_HIDE_RULE &Rule,
 
 DLL InstallResult UsbDk_AddPersistentHideRule(PUSB_DK_HIDE_RULE Rule)
 {
+	OutputDebugStringA("UsbDk_AddPersistentHideRule");
     return ModifyPersistentHideRules(*Rule, &CRulesManager::AddRule);
 }
 
 DLL InstallResult UsbDk_DeletePersistentHideRule(PUSB_DK_HIDE_RULE Rule)
 {
+	OutputDebugStringA("UsbDk_DeletePersistentHideRule");
     return ModifyPersistentHideRules(*Rule, &CRulesManager::DeleteRule);
 }

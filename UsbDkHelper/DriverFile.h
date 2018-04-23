@@ -27,6 +27,29 @@
 
 #define DRIVER_FILE_EXCEPTION_STRING TEXT("Driver file operation error. ")
 
+class MutexT {
+public:
+	MutexT() {
+		_usbdk_mutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, TEXT("usbdk_mutex"));
+		if (_usbdk_mutex == NULL)
+			_usbdk_mutex = CreateMutex(NULL, FALSE, TEXT("usbdk_mutex"));
+	}
+	~MutexT() {
+		CloseHandle(_usbdk_mutex);
+	}
+	void lock() {
+		WaitForSingleObject(_usbdk_mutex, INFINITE);
+	}
+	void unlock() {
+		ReleaseMutex(_usbdk_mutex);
+	}
+private:
+	void* _usbdk_mutex;
+	// no copy
+	MutexT(const MutexT&);
+	void operator=(const MutexT&);
+};
+
 class UsbDkDriverFileException : public UsbDkW32ErrorException
 {
 public:
@@ -39,12 +62,11 @@ public:
 class UsbDkDriverFile
 {
 public:
-    UsbDkDriverFile(LPCTSTR lpFileName, bool bOverlapped = false);
+    UsbDkDriverFile(LPCTSTR lpFileName, bool bOverlapped = false, bool bLocked = false);
     UsbDkDriverFile(HANDLE ObjectHandle, bool bOverlapped = false)
                     : m_bOverlapped(bOverlapped), m_hDriver(ObjectHandle)
     {}
-    virtual ~UsbDkDriverFile()
-    { CloseHandle(m_hDriver); }
+	virtual ~UsbDkDriverFile();
 
     TransferResult Ioctl(DWORD Code,
                bool ShortBufferOk = false,
@@ -70,4 +92,6 @@ protected:
 
 private:
     bool m_bOverlapped;
+	bool m_locked;
+	//mutex_t _mutex;
 };

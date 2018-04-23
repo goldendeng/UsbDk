@@ -25,9 +25,15 @@
 #include "DriverFile.h"
 
 
-UsbDkDriverFile::UsbDkDriverFile(LPCTSTR lpFileName, bool bOverlapped)
+static MutexT g_mutex;
+UsbDkDriverFile::UsbDkDriverFile(LPCTSTR lpFileName, bool bOverlapped, bool bLocked)
 {
     m_bOverlapped = bOverlapped;
+    m_locked = bLocked;
+
+    if (bLocked)
+        g_mutex.lock();
+
 
     m_hDriver = CreateFile(lpFileName,
                            GENERIC_READ | GENERIC_WRITE,
@@ -41,6 +47,13 @@ UsbDkDriverFile::UsbDkDriverFile(LPCTSTR lpFileName, bool bOverlapped)
     {
         throw UsbDkDriverFileException(tstring(TEXT("Failed to open device symlink ")) + lpFileName);
     }
+}
+
+UsbDkDriverFile::~UsbDkDriverFile()
+{
+    CloseHandle(m_hDriver);
+    if (m_locked)
+        g_mutex.unlock();
 }
 
 TransferResult UsbDkDriverFile::Ioctl(DWORD Code,
